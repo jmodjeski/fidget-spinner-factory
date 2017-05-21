@@ -19,5 +19,3 @@ if (process.env.NODE_ENV !== 'production') {
 const store = applyMiddleware(...middlewares)(createStore)(reducer);
 ReactDOM.render(<App store={store} />, document.getElementById('root'));
 registerServiceWorker();
-
-store.dispatch({type: 'TEST', payload: {b: 'set'}});

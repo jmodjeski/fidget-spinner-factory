@@ -1,0 +1,20 @@
+
+.FlexContainer {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid green;
+  margin: 0px;
+  overflow: auto;
+}
+
+.FlexContainer-Row {
+  flex-direction: row;
+}
+
+.FlexContainer * {
+  flex: 1;
+}
+
+.FlexContainer-Fill {
+  height: 100%;
+}

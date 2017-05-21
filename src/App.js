@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import FlexContainer from './components/FlexContainer';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import Toolbar from './components/Toolbar';
+import Drawer from './components/Drawer';
+import Designer from './components/Designer';
 import './App.css';
 
 class App extends Component {
@@ -19,15 +24,17 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          It's edited
-        </p>
-      </div>
+      <FlexContainer fill>
+        <Header />
+        <FlexContainer flexDirection='row' fill>
+          <Toolbar />
+          <Drawer />
+          <Designer />
+          <Drawer />
+          <Toolbar />
+        </FlexContainer>
+        <Footer />
+      </FlexContainer>
     );
   }
 }
