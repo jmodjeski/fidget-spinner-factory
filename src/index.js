@@ -5,7 +5,9 @@ import registerServiceWorker from './registerServiceWorker';
 import './index.css';
 import * as redux from 'redux';
 import reducer from './reducers';
-import * as reduxLogger from 'redux-logger'
+import * as reduxLogger from 'redux-logger';
+import canvasMiddleware from './middleware/canvas';
+import renderer from './renderer';
 
 const {createStore, applyMiddleware} = redux;
 const {createLogger} = reduxLogger;
@@ -16,6 +18,13 @@ if (process.env.NODE_ENV !== 'production') {
   });
   middlewares.push(logger);  
 }
+middlewares.push(canvasMiddleware);
+
 const store = applyMiddleware(...middlewares)(createStore)(reducer);
+store.subscribe(() => {
+  renderer(store.getState());
+});
 ReactDOM.render(<App store={store} />, document.getElementById('root'));
 registerServiceWorker();
+
+window.addEventListener('resize', () => renderer(store.getState()));

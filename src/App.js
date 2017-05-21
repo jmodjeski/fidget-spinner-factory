@@ -29,7 +29,7 @@ class App extends Component {
         <FlexContainer flexDirection='row' fill>
           <Toolbar />
           <Drawer />
-          <Designer />
+          <Designer store={this.props.store}/>
           <Drawer />
           <Toolbar />
         </FlexContainer>

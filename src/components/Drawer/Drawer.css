@@ -1,4 +1,5 @@
 
 .Drawer {
   max-width: 200px;
+  display: none;
 }

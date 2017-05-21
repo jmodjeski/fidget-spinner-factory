@@ -1,4 +1,9 @@
 
 .Designer {
+  overflow: hidden;
+}
 
+.Designer canvas {
+  width: 100%;
+  height: 100%;
 }
