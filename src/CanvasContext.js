@@ -22,7 +22,7 @@ export default class CanvasContext {
     return vec2.transformMat3(vec, vec, this.transform);
   }
 
-  drawGrid () {
+  drawGrid (rows, columns, size) {
     const {height, width} = this;
     const mid = this.transformToNative(0, 0);
 
@@ -37,14 +37,23 @@ export default class CanvasContext {
     this.drawContext.strokeWidth = 0.5;
     this.drawContext.stroke();
 
-    const first = this.transformToNative(10, 10);
-
     this.drawContext.beginPath();
-    this.drawContext.moveTo(first[0], 0);
-    this.drawContext.lineTo(first[0], height);
-
-    this.drawContext.moveTo(0, first[1]);
-    this.drawContext.lineTo(width, first[1]);
+    for (let r = 0; r < rows; r++) {
+      let p1 = this.transformToNative(size * r, 0);
+      let p2 = this.transformToNative(-size * r, 0);
+      this.drawContext.moveTo(p1[0], 0);
+      this.drawContext.lineTo(p1[0], height);
+      this.drawContext.moveTo(p2[0], 0);
+      this.drawContext.lineTo(p2[0], height);
+    }
+    for (let c = 0; c < columns; c++) {
+      let p1 = this.transformToNative(0, size * c);
+      let p2 = this.transformToNative(0, -size * c);
+      this.drawContext.moveTo(0, p1[1]);
+      this.drawContext.lineTo(width, p1[1]);
+      this.drawContext.moveTo(0, p2[1]);
+      this.drawContext.lineTo(width, p2[1]);
+    }
 
     this.drawContext.strokeStyle = 'green';
     this.drawContext.strokeWidth = 0.5;
