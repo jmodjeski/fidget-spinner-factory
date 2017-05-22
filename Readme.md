@@ -11,3 +11,8 @@ I figured, it might be easier for me to generate a small app to isolate the impo
 
 ## Future Rambles
 I really would like to be able to have a _mode_ option to the app to allow both 2d and 3d spinners to be generated.  Not sure how the 3d will fit it, but its on the list.  This was part of the reasoning to use Canvas vs SVG.  Maybe there is a way to switch out to using webgl for both 2d and 3d design.  Still keep the same design semantics, but generate code compatible with https://openjscad.org to generate an STL for 3d printing.
+
+## Attributions
+Logo - Fidget Spinner by Nathan Kim from the Noun Project
+https://thenounproject.com/search/?q=fidget%20spinner&i=1017001
+

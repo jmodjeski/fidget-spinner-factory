@@ -28,5 +28,3 @@ function render (state) {
     instanceContext.drawGrid();
   }
 }
-
-

@@ -29,7 +29,7 @@ export default class CanvasContext {
     }
 
     this.drawContext.strokeColor = 'lightblue';
-    this.drawContext.strokeWidth = 1;
+    this.drawContext.strokeWidth = 0.5;
     this.drawContext.stroke();
   }
 }
