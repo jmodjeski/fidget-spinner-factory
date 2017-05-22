@@ -38,11 +38,16 @@ function render (state) {
   }
 }
 
-function createLayoutTransform (state) {
+function createLayoutTransform (state, width, height) {
   const transform = mat3.create();
 
+  // unit scale assumes 96dpi
+  const unitScale = (96 / 25.4);
+  const unitScaleX = 1/(width/unitScale);
+  const unitScaleY = 1/(height/unitScale);
+
   mat3.translate(transform, transform, vec2.fromValues(0.5, 0.5));
+  mat3.scale(transform, transform, vec2.fromValues(unitScaleX, unitScaleY))
 
   return transform;
 }
-

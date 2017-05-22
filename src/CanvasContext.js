@@ -36,5 +36,20 @@ export default class CanvasContext {
     this.drawContext.strokeStyle = 'blue';
     this.drawContext.strokeWidth = 0.5;
     this.drawContext.stroke();
+
+    const first = this.transformToNative(10, 10);
+
+    this.drawContext.beginPath();
+    this.drawContext.moveTo(first[0], 0);
+    this.drawContext.lineTo(first[0], height);
+
+    this.drawContext.moveTo(0, first[1]);
+    this.drawContext.lineTo(width, first[1]);
+
+    this.drawContext.strokeStyle = 'green';
+    this.drawContext.strokeWidth = 0.5;
+    this.drawContext.stroke();
+
+
   }
 }
