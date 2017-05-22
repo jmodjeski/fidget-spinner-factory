@@ -1,5 +1,5 @@
 import * as redux from 'redux';
-import * as project from './project/index';
+import project from './project/index';
 
 const {combineReducers} = redux;
 

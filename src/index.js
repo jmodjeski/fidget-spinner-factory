@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+// import registerServiceWorker from './registerServiceWorker';
 import './index.css';
 import * as redux from 'redux';
 import reducer from './reducers';
@@ -25,6 +25,6 @@ store.subscribe(() => {
   renderer(store.getState());
 });
 ReactDOM.render(<App store={store} />, document.getElementById('root'));
-registerServiceWorker();
+// registerServiceWorker();
 
 window.addEventListener('resize', () => renderer(store.getState()));
