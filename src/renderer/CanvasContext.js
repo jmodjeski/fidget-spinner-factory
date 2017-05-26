@@ -34,7 +34,7 @@ export default class CanvasContext {
     this.drawContext.lineTo(width, mid[1]);
 
     this.drawContext.strokeStyle = 'blue';
-    this.drawContext.strokeWidth = 0.5;
+    this.drawContext.lineWidth = 0.25;
     this.drawContext.stroke();
 
     this.drawContext.beginPath();
@@ -56,9 +56,9 @@ export default class CanvasContext {
     }
 
     this.drawContext.strokeStyle = 'green';
-    this.drawContext.strokeWidth = 0.5;
+    this.drawContext.lineWidth = 0.25;
     this.drawContext.stroke();
-
-
   }
+
+  draw
 }

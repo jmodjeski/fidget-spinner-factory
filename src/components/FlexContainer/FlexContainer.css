@@ -2,7 +2,6 @@
 .FlexContainer {
   display: flex;
   flex-direction: column;
-  border: 1px solid green;
   margin: 0px;
   overflow: auto;
 }
