@@ -1,5 +1,5 @@
 import fp from 'lodash/fp';
-import CanvasContext from '../CanvasContext';
+import CanvasContext from './CanvasContext';
 import glMatrix from 'gl-matrix';
 import * as globalEvents from '../global-events';
 
