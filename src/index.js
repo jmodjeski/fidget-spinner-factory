@@ -7,6 +7,7 @@ import * as redux from 'redux';
 import reducer from './reducers';
 import * as reduxLogger from 'redux-logger';
 import designerMiddleware from './middleware/designer';
+import globalEventsMiddleware from './middleware/global-events';
 import renderer from './renderer';
 
 const {createStore, applyMiddleware} = redux;
@@ -18,6 +19,7 @@ if (process.env.NODE_ENV !== 'production') {
   });
   middlewares.push(logger);  
 }
+middlewares.push(globalEventsMiddleware);
 middlewares.push(designerMiddleware);
 
 const store = applyMiddleware(...middlewares)(createStore)(reducer);
