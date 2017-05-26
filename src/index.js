@@ -6,7 +6,7 @@ import './index.css';
 import * as redux from 'redux';
 import reducer from './reducers';
 import * as reduxLogger from 'redux-logger';
-import canvasMiddleware from './middleware/canvas';
+import designerMiddleware from './middleware/designer';
 import renderer from './renderer';
 
 const {createStore, applyMiddleware} = redux;
@@ -18,7 +18,7 @@ if (process.env.NODE_ENV !== 'production') {
   });
   middlewares.push(logger);  
 }
-middlewares.push(canvasMiddleware);
+middlewares.push(designerMiddleware);
 
 const store = applyMiddleware(...middlewares)(createStore)(reducer);
 store.subscribe(() => {

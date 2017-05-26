@@ -6,7 +6,7 @@ export default class Designer extends React.Component {
   componentDidMount () {
     let {dispatch} = this.props.store;
     dispatch({
-      type: 'REGISTER_CANVAS',
+      type: 'REGISTER_DESIGNER',
       payload: this.canvas
     });
   }
@@ -14,7 +14,7 @@ export default class Designer extends React.Component {
   componentWillUnmount () {
     let {dispatch} = this.props.store;
     dispatch({
-      type: 'DEREGISTER_CANVAS',
+      type: 'DEREGISTER_DESIGNER',
       payload: this.canvas
     });
   }
