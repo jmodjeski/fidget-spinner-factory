@@ -19,10 +19,13 @@ export default class Designer extends React.Component {
     });
   }
 
+  onWheel = (e) => {
+    e.preventDefault();
+  }
 
   render () {
     return (<div className='Designer'>
-      <canvas ref={(target) => this.canvas = target} />
+      <canvas onWheel={this.onWheel} ref={(target) => this.canvas = target} />
     </div>);
   }
 }
