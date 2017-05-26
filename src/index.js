@@ -7,7 +7,7 @@ import * as redux from 'redux';
 import reducer from './reducers';
 import * as reduxLogger from 'redux-logger';
 import designerMiddleware from './middleware/designer';
-import renderer, * as renderConfig from './renderer';
+import renderer, * as renderConfig from './renderer/index';
 
 const {createStore, applyMiddleware} = redux;
 const {createLogger} = reduxLogger;
