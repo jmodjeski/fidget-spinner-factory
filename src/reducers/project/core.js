@@ -1,4 +1,4 @@
 export const initialState = {
-  innerRadius: 22,
-  outerRadius: 29
+  innerRadius: 22 / 2,
+  outerRadius: 29 / 2
 };

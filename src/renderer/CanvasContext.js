@@ -9,17 +9,27 @@ export default class CanvasContext {
     this.transform = mat3.create();
     this.drawContext = drawContext;
 
-    this.scaler = mat3.create();
-    mat3.fromScaling(this.scaler, vec2.fromValues(this.width, this.height));
+    this.scalerTransform = mat3.create();
+    this.unitTransform = mat3.create();
+    this.viewTransform = mat3.create();
+
+    mat3.fromScaling(this.scalerTransform, vec2.fromValues(this.width, this.height));
   }
 
-  useTransform (matrix) {
-    mat3.multiply(this.transform, this.scaler, matrix);
+  useTransforms (viewMatrix, unitMatrix) {
+    mat3.multiply(this.unitTransform, unitMatrix, this.scalerTransform);
+    mat3.multiply(this.viewTransform, viewMatrix, unitMatrix);
+    mat3.multiply(this.viewTransform, this.scalerTransform, this.viewTransform);
   }
 
   transformToNative (x, y) {
     let vec = vec2.fromValues(x, y);
-    return vec2.transformMat3(vec, vec, this.transform);
+    return vec2.transformMat3(vec, vec, this.viewTransform);
+  }
+
+  transformUnitToNative (x, y) {
+    let vec = vec2.fromValues(x, y);
+    return vec2.transformMat3(vec, vec, this.unitTransform);
   }
 
   drawGrid (rows, columns, size) {
@@ -60,5 +70,24 @@ export default class CanvasContext {
     this.drawContext.stroke();
   }
 
-  draw
+  beginPath () {
+    this.drawContext.beginPath();
+  }
+
+  stroke (color, width) {
+    this.drawContext.strokeStyle = color;
+    this.drawContext.lineWidth = width;
+    this.drawContext.stroke();
+  }
+
+  fill (color, fillRule) {
+    this.drawContext.fillStyle = color;
+    this.drawContext.fill(fillRule);
+  }
+
+  drawEllipse(x, y, radiusX, radiusY) {
+    let radii = this.transformUnitToNative(radiusX, radiusY);
+    let center = this.transformToNative(x, y);
+    this.drawContext.ellipse(center[0], center[1], radii[0], radii[1], 360 * Math.PI/180, 0, 360 * Math.PI/180);
+  }
 }

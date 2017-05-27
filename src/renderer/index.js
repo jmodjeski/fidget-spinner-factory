@@ -13,15 +13,14 @@ const renderContext = {
 export default render;
 
 export function registerCanvas (state, action) {
-  let subscriptions = [];
   let canvas = action.payload;
 
   renderContext.canvas = canvas;
 
   subscribePan(renderContext.subscriptions);
 
-  renderContext.canvas.addEventListener('onwheel', (e) => e.preventDefault());
-  renderContext.canvas.addEventListener('oncontextmenu', (e) => e.preventDefault());
+  renderContext.canvas.addEventListener('wheel', (e) => e.preventDefault());
+  renderContext.canvas.addEventListener('contextmenu', (e) => e.preventDefault());
 }
 
 export function deregisterCanvas (action) {
@@ -86,36 +85,34 @@ function uncheckedRender (state) {
   let {width, height} = canvas;
   let drawContext = canvas.getContext('2d');
   let instanceContext = new CanvasContext(drawContext);
-  let transform = createLayoutTransform(width, height);
+  let unitScaleTransform = computeUnitScaleTransform(width, height);
   let viewTransform = computeViewTransform(state.panX || 0, state.panY || 0);
 
-  mat3.multiply(transform, viewTransform, transform);
+  instanceContext.useTransforms(viewTransform, unitScaleTransform);
 
-  instanceContext.useTransform(transform);
-
-  renderGrid(instanceContext, transform, state);
+  renderGrid(instanceContext, state);
+  renderCenterSpinner(instanceContext, state);
 }
 
-function computeViewTransform (panX, panY) {
-  let viewMatrix = mat3.create();
-  let pan = vec2.fromValues(panX, panY);
-
-  mat3.translate(viewMatrix, viewMatrix, pan);
-
-  return viewMatrix;
-}
-
-function renderGrid (context, transform) {
+function renderGrid (context) {
   let {width, height} = context.drawContext.canvas;
   const size = 10;
   let cellCounts = computeCellCounts(size, width, height);
   context.drawGrid(cellCounts[0], cellCounts[1], size);
 }
 
+function renderCenterSpinner (context, state) {
+  context.beginPath();
+  context.drawEllipse(0, 0, state.project.core.outerRadius, state.project.core.outerRadius);
+  context.drawEllipse(0, 0, state.project.core.innerRadius, state.project.core.innerRadius);
+  context.fill('gray', 'evenodd');
+  context.stroke('black', 1);
+}
+
 function computeCellCounts (size, width, height) {
   let unitScale = computeUnitScaleTransform(width, height);
   let vec = vec2.fromValues(size, size);
-  vec2.mul(vec, vec, unitScale);
+  vec2.transformMat3(vec, vec, unitScale);
   return [
     (width / vec[0]) >> 0,
     (height / vec[1]) >> 0,
@@ -127,15 +124,17 @@ function computeUnitScaleTransform (width, height) {
   const unitScale = ((96 * window.devicePixelRatio) / 25.4);
   const unitScaleX = 1/(width/unitScale);
   const unitScaleY = 1/(height/unitScale);
-  return vec2.fromValues(unitScaleX, unitScaleY)
+  const transform = mat3.create();
+  mat3.fromScaling(transform, vec2.fromValues(unitScaleX, unitScaleY))
+  return transform;
 }
 
-function createLayoutTransform (width, height) {
+function computeViewTransform (panX, panY) {
+  let pan = vec2.fromValues(panX, panY);
   const transform = mat3.create();
-  const unitScale = computeUnitScaleTransform(width, height);
 
   mat3.translate(transform, transform, vec2.fromValues(0.5, 0.5));
-  mat3.scale(transform, transform, unitScale);
+  mat3.translate(transform, transform, pan);
 
   return transform;
 }
