@@ -3,9 +3,12 @@ import CanvasContext from './CanvasContext';
 import glMatrix from 'gl-matrix';
 import * as globalEvents from '../global-events';
 
+window.glMatrix = glMatrix;
+
 const {mat3, vec2} = glMatrix;
 
 const renderContext = {
+  zoom: mat3.create(),
   canvas: null,
   subscriptions: []
 };
@@ -18,6 +21,7 @@ export function registerCanvas (state, action) {
   renderContext.canvas = canvas;
 
   subscribePan(renderContext.subscriptions);
+  subscribeZoom(renderContext.subscriptions);
 
   renderContext.canvas.addEventListener('wheel', (e) => e.preventDefault());
   renderContext.canvas.addEventListener('contextmenu', (e) => e.preventDefault());
@@ -42,6 +46,12 @@ function subscribePan (subscriptions) {
   let leftDrag = globalEvents.leftDrag(canvas);
   subscriptions.push(leftDrag.subscribe(pan));
   subscriptions.push(leftDrag.last().subscribe(endPan));
+}
+
+function subscribeZoom (subscriptions) {
+  let {canvas} = renderContext;
+  let scrollY = globalEvents.scrollY(canvas);
+  subscriptions.push(scrollY.subscribe(zoom));
 }
 
 function computePan (state, e) {
@@ -69,6 +79,23 @@ function endPan (e) {
   subscribePan(renderContext.subscriptions);
 }
 
+function zoom (e) {
+  const translate = vec2.fromValues(
+    e.srcX / renderContext.canvas.width,
+    e.srcY / renderContext.canvas.height
+  );
+  const zoom = vec2.fromValues(1 / e.delta, 1 / e.delta);
+  const transform = mat3.create();
+  // mat3.translate(transform, transform, translate);
+  mat3.scale(transform, transform, zoom);
+
+  // vec2.negate(translate, translate);
+  // mat3.translate(transform, transform, translate);
+  mat3.multiply(renderContext.zoom, renderContext.zoom, transform);
+  console.log(renderContext.zoom);
+  uncheckedRender(renderContext.lastState);
+}
+
 function render (state) {
   renderContext.lastState = state;
   if (renderContext.canvas) {
@@ -86,11 +113,11 @@ function uncheckedRender (state) {
   let drawContext = canvas.getContext('2d');
   let instanceContext = new CanvasContext(drawContext);
   let unitScaleTransform = computeUnitScaleTransform(width, height);
-  let viewTransform = computeViewTransform(state.panX || 0, state.panY || 0);
+  let viewTransform = computeViewTransform(state.panX, state.panY, renderContext.zoom);
 
   instanceContext.useTransforms(viewTransform, unitScaleTransform);
 
-  renderGrid(instanceContext, state);
+  //renderGrid(instanceContext, state);
   renderCenterSpinner(instanceContext, state);
 }
 
@@ -129,12 +156,13 @@ function computeUnitScaleTransform (width, height) {
   return transform;
 }
 
-function computeViewTransform (panX, panY) {
+function computeViewTransform (panX, panY, zoom) {
   let pan = vec2.fromValues(panX, panY);
   const transform = mat3.create();
 
   mat3.translate(transform, transform, vec2.fromValues(0.5, 0.5));
   mat3.translate(transform, transform, pan);
+  mat3.multiply(transform, transform, zoom);
 
   return transform;
 }
